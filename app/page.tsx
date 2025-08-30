@@ -1,5 +1,6 @@
 import { VideoCard } from '@/components/video-card'
 import { LoginForm } from '@/components/login-form'
+import { UserStatus } from '@/components/user-status'
 
 const sampleVideos = [
   {
@@ -29,12 +30,15 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* ヘッダー */}
-      <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-blue-600">🎓 LearnHub</h1>
-          <LoginForm />
-        </div>
-      </header>
+<header className="bg-white shadow-sm border-b">
+  <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+    <h1 className="text-2xl font-bold text-blue-600">🎓 LearnHub</h1>
+    <div className="flex items-center space-x-4">
+      <UserStatus />
+      <LoginForm />
+    </div>
+  </div>
+</header>
 
       {/* メインコンテンツ */}
       <main className="max-w-7xl mx-auto px-4 py-8">
