@@ -1,6 +1,5 @@
 import { VideoCard } from '@/components/video-card'
 import { LoginForm } from '@/components/login-form'
-import { UserStatus } from '@/components/user-status'
 
 const sampleVideos = [
   {
