@@ -33,6 +33,9 @@ export default function Home() {
   <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
     <h1 className="text-2xl font-bold text-blue-600">🎓 LearnHub</h1>
     <div className="flex items-center space-x-4">
+      <a href="/admin" className="text-gray-600 hover:text-blue-600 transition-colors">
+        🛠️ 管理画面
+      </a>
       <a href="/pricing" className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-medium transition-colors">
         💳 プラン選択
       </a>
