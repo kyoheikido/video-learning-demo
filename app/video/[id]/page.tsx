@@ -9,50 +9,53 @@ interface Video {
   id: number
   title: string
   description: string
-  videoUrl: string
+  video_url: string
   duration: string
-  isFree: boolean
-}
-
-// サンプル動画データ
-const sampleVideos: Record<string, Video> = {
-  '1': {
-    id: 1,
-    title: "【NEW】Next.js入門講座",
-    description: "Next.jsの基礎から実践まで、丁寧に解説します。React の知識がある方向けの講座です。",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    duration: "45分",
-    isFree: true
-  },
-  '2': {
-    id: 2,
-    title: "React Hooks完全ガイド",
-    description: "useState、useEffect、カスタムフックまで完全マスター！",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4", 
-    duration: "1時間20分",
-    isFree: false
-  },
-  '3': {
-    id: 3,
-    title: "TypeScript基礎講座",
-    description: "型安全なコードを書くための基礎知識を身につけましょう。",
-    videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-    duration: "30分", 
-    isFree: true
-  }
+  is_free: boolean
 }
 
 export default function VideoPage({ params }: { params: { id: string } }) {
   const [user, setUser] = useState<User | null>(null)
-  const video = sampleVideos[params.id]
+  const [video, setVideo] = useState<Video | null>(null)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const getUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       setUser(user)
     }
+
+    const getVideo = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('videos')
+          .select('*')
+          .eq('id', params.id)
+          .single()
+
+        if (error) {
+          throw error
+        }
+
+        setVideo(data)
+      } catch (error) {
+        console.error('動画取得エラー:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
     getUser()
-  }, [])
+    getVideo()
+  }, [params.id])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      </div>
+    )
+  }
 
   if (!video) {
     return (
@@ -68,7 +71,7 @@ export default function VideoPage({ params }: { params: { id: string } }) {
   }
 
   // 有料動画でログインしていない場合
-  if (!video.isFree && !user) {
+  if (!video.is_free && !user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -97,16 +100,16 @@ export default function VideoPage({ params }: { params: { id: string } }) {
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <VideoPlayer 
-  videoUrl={video.videoUrl}
-/>
+            videoUrl={video.video_url}
+          />
           
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
               <h1 className="text-2xl font-bold text-gray-800">{video.title}</h1>
               <span className={`px-3 py-1 rounded text-sm font-medium ${
-                video.isFree ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
+                video.is_free ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
               }`}>
-                {video.isFree ? '無料' : '有料'}
+                {video.is_free ? '無料' : '有料'}
               </span>
             </div>
             
