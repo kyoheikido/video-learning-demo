@@ -4,7 +4,7 @@ import { LoginForm } from '@/components/login-form'
 const sampleVideos = [
   {
     id: 1,
-    title: "【NEW】Next.js入門講座",
+    title: "【新NEW】Next.js入門講座",
     thumbnail: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400",
     duration: "45分",
     isFree: true
