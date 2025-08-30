@@ -33,7 +33,9 @@ export default function Home() {
   <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
     <h1 className="text-2xl font-bold text-blue-600">🎓 LearnHub</h1>
     <div className="flex items-center space-x-4">
-      <UserStatus />
+      <a href="/my-page" className="text-gray-600 hover:text-blue-600 transition-colors">
+        マイページ
+      </a>
       <LoginForm />
     </div>
   </div>
