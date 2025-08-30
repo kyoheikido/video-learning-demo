@@ -1,51 +1,94 @@
+'use client'
+import { useState, useEffect } from 'react'
 import { VideoCard } from '@/components/video-card'
 import { LoginForm } from '@/components/login-form'
+import { supabase } from '@/lib/supabase'
 
-const sampleVideos = [
-  {
-    id: 1,
-    title: "【新NEW】Next.js入門講座",
-    thumbnail: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400",
-    duration: "45分",
-    isFree: true
-  },
-  {
-    id: 2,
-    title: "React Hooks完全ガイド", 
-    thumbnail: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=400",
-    duration: "1時間20分",
-    isFree: false
-  },
-  {
-    id: 3,
-    title: "TypeScript基礎講座",
-    thumbnail: "https://images.unsplash.com/photo-1587620962725-abab7fe55159?w=400", 
-    duration: "30分",
-    isFree: true
-  }
-]
+interface Video {
+  id: number
+  title: string
+  thumbnail_url: string
+  duration: string
+  is_free: boolean
+}
 
 export default function Home() {
+  const [videos, setVideos] = useState<Video[]>([])
+  const [loading, setLoading] = useState(true)
+
+  // 動画データを取得
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('videos')
+          .select('id, title, thumbnail_url, duration, is_free')
+          .order('created_at', { ascending: false })
+
+        if (error) {
+          throw error
+        }
+
+        setVideos(data || [])
+      } catch (error) {
+        console.error('動画取得エラー:', error)
+        // エラー時はサンプル動画を表示
+        setVideos([
+          {
+            id: 1,
+            title: "サンプル動画",
+            thumbnail_url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400",
+            duration: "45分",
+            is_free: true
+          }
+        ])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchVideos()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <header className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 className="text-2xl font-bold text-blue-600">🎓 LearnHub</h1>
+          </div>
+        </header>
+        <main className="max-w-7xl mx-auto px-4 py-8">
+          <div className="animate-pulse grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-gray-200 h-64 rounded-lg"></div>
+            ))}
+          </div>
+        </main>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* ヘッダー */}
-<header className="bg-white shadow-sm border-b">
-  <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-    <h1 className="text-2xl font-bold text-blue-600">🎓 LearnHub</h1>
-    <div className="flex items-center space-x-4">
-      <a href="/admin" className="text-gray-600 hover:text-blue-600 transition-colors">
-        🛠️ 管理画面
-      </a>
-      <a href="/pricing" className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-medium transition-colors">
-        💳 プラン選択
-      </a>
-      <a href="/my-page" className="text-gray-600 hover:text-blue-600 transition-colors">
-        マイページ
-      </a>
-      <LoginForm />
-    </div>
-  </div>
-</header>
+      <header className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-blue-600">🎓 LearnHub</h1>
+          <div className="flex items-center space-x-4">
+            <a href="/admin" className="text-gray-600 hover:text-blue-600 transition-colors">
+              🛠️ 管理画面
+            </a>
+            <a href="/pricing" className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded font-medium transition-colors">
+              💳 プラン選択
+            </a>
+            <a href="/my-page" className="text-gray-600 hover:text-blue-600 transition-colors">
+              マイページ
+            </a>
+            <LoginForm />
+          </div>
+        </div>
+      </header>
 
       {/* メインコンテンツ */}
       <main className="max-w-7xl mx-auto px-4 py-8">
@@ -57,11 +100,21 @@ export default function Home() {
             まずは無料講座から始めて、スキルアップしていきましょう！
           </p>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {sampleVideos.map((video) => (
-              <VideoCard key={video.id} video={video} />
-            ))}
-          </div>
+          {videos.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="text-gray-400 text-4xl mb-4">📹</div>
+              <p className="text-gray-600">まだ動画がアップロードされていません</p>
+              <a href="/admin" className="text-blue-500 hover:text-blue-600 mt-2 inline-block">
+                管理画面から動画をアップロードしてください
+              </a>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {videos.map((video) => (
+                <VideoCard key={video.id} video={video} />
+              ))}
+            </div>
+          )}
         </section>
       </main>
     </div>
