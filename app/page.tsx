@@ -7,9 +7,9 @@ import { supabase } from '@/lib/supabase'
 interface Video {
   id: number
   title: string
-  thumbnail_url: string
+  thumbnail: string
   duration: string
-  is_free: boolean
+  isFree: boolean
 }
 
 export default function Home() {
@@ -29,7 +29,16 @@ export default function Home() {
           throw error
         }
 
-        setVideos(data || [])
+        // データ変換（VideoCard の型に合わせる）
+        const transformedVideos = (data || []).map(video => ({
+          id: video.id,
+          title: video.title,
+          thumbnail: video.thumbnail_url,  // thumbnail_url → thumbnail
+          duration: video.duration,
+          isFree: video.is_free           // is_free → isFree
+        }))
+
+        setVideos(transformedVideos)
       } catch (error) {
         console.error('動画取得エラー:', error)
         // エラー時はサンプル動画を表示
@@ -37,9 +46,9 @@ export default function Home() {
           {
             id: 1,
             title: "サンプル動画",
-            thumbnail_url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400",
+            thumbnail: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400",
             duration: "45分",
-            is_free: true
+            isFree: true
           }
         ])
       } finally {
