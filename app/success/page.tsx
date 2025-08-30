@@ -56,7 +56,7 @@ export default function SuccessPage() {
         {user && (
           <div className="bg-blue-50 rounded p-4 mb-6">
             <p className="text-sm text-blue-700">
-              📧 {(user as any).email} でプレミアム会員になりました
+              📧 {user && typeof user === 'object' && 'email' in user ? (user as { email: string }).email : 'ユーザー'} でプレミアム会員になりました
             </p>
           </div>
         )}

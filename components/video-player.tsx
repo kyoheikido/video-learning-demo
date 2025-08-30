@@ -3,10 +3,9 @@ import { useState, useRef, useEffect } from 'react'
 
 interface VideoPlayerProps {
   videoUrl: string
-  title: string
 }
 
-export function VideoPlayer({ videoUrl, title }: VideoPlayerProps) {
+export function VideoPlayer({ videoUrl }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [currentTime, setCurrentTime] = useState(0)

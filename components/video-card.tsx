@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface Video {
   id: number
@@ -17,11 +18,13 @@ export function VideoCard({ video }: VideoCardProps) {
     <Link href={`/video/${video.id}`}>
       <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
         <div className="relative">
-          <img 
-            src={video.thumbnail} 
-            alt={video.title}
-            className="w-full h-48 object-cover"
-          />
+          <Image 
+  src={video.thumbnail} 
+  alt={video.title}
+  width={400}
+  height={192}
+  className="w-full h-48 object-cover"
+/>
           <div className="absolute top-2 right-2">
             {video.isFree ? (
               <span className="bg-green-500 text-white px-2 py-1 rounded text-xs font-medium">
