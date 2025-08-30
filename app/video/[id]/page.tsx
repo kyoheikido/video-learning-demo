@@ -97,9 +97,8 @@ export default function VideoPage({ params }: { params: { id: string } }) {
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <VideoPlayer 
-            videoUrl={video.videoUrl}
-            title={video.title}
-          />
+  videoUrl={video.videoUrl}
+/>
           
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
