@@ -70,9 +70,10 @@ export function VideoUploader({ userId }: VideoUploaderProps) {
     setUploadProgress(0)
 
     try {
-      // ファイル名生成（タイムスタンプ + オリジナル名）
-      const fileName = `${Date.now()}_${selectedFile.name}`
-      const filePath = `videos/${fileName}`
+// ファイル名生成（安全な形式に変換）
+const fileExtension = selectedFile.name.split('.').pop()
+const safeFileName = `${Date.now()}_video.${fileExtension}`
+const filePath = `videos/${safeFileName}`
 
       // Supabase Storageにアップロード
       const { data: uploadData, error: uploadError } = await supabase.storage
