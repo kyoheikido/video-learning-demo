@@ -2,10 +2,11 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
+import type { User } from '@supabase/supabase-js'
 
 export default function SuccessPage() {
   const [sessionId, setSessionId] = useState('')
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<User | null>(null)
 
   useEffect(() => {
     // URLからsession_idを取得
@@ -56,7 +57,7 @@ export default function SuccessPage() {
         {user && (
           <div className="bg-blue-50 rounded p-4 mb-6">
             <p className="text-sm text-blue-700">
-              📧 {user && typeof user === 'object' && 'email' in user ? (user as { email: string }).email : 'ユーザー'} でプレミアム会員になりました
+              📧 {user.email} でプレミアム会員になりました
             </p>
           </div>
         )}
