@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { VideoPlayer } from '@/components/video-player'
+import type { User } from '@supabase/supabase-js'
 
 interface Video {
   id: number
@@ -42,7 +43,7 @@ const sampleVideos: Record<string, Video> = {
 }
 
 export default function VideoPage({ params }: { params: { id: string } }) {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState<User | null>(null)
   const video = sampleVideos[params.id]
 
   useEffect(() => {
