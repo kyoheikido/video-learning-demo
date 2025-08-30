@@ -32,8 +32,9 @@ export function LoginForm() {
         setMessage('ログイン成功！')
         setIsOpen(false)
       }
-    } catch (error: any) {
-      setMessage(`エラー: ${error.message}`)
+} catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'エラーが発生しました'
+      setMessage(`エラー: ${errorMessage}`)
     } finally {
       setLoading(false)
     }

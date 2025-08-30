@@ -1,7 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import Image from 'next/image'
 import { supabase } from '@/lib/supabase'
-import type { User } from '@supabase/supabase-js'
 
 export default function MyPage() {
   const [user, setUser] = useState<User | null>(null)
@@ -43,9 +44,9 @@ export default function MyPage() {
     return <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-800 mb-4">ログインが必要です</h2>
-        <a href="/" className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded">
-          ホームに戻る
-        </a>
+<Link href="/" className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded">
+  ホームに戻る
+</Link>
       </div>
     </div>
   }
@@ -55,7 +56,7 @@ export default function MyPage() {
       {/* ヘッダー */}
       <header className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-          <a href="/" className="text-2xl font-bold text-blue-600">🎓 LearnHub</a>
+          <Link href="/" className="text-2xl font-bold text-blue-600">🎓 LearnHub</Link>
           <div className="text-sm text-gray-600">
             マイページ
           </div>
@@ -85,11 +86,13 @@ export default function MyPage() {
           <div className="space-y-4">
             {watchHistory.map((item) => (
               <div key={item.id} className="flex items-center space-x-4 p-4 border rounded-lg hover:bg-gray-50">
-                <img 
-                  src={item.thumbnail} 
-                  alt={item.title}
-                  className="w-20 h-12 object-cover rounded"
-                />
+                <Image 
+  src={item.thumbnail} 
+  alt={item.title}
+  width={80}
+  height={48}
+  className="w-20 h-12 object-cover rounded"
+/>
                 <div className="flex-1">
                   <h3 className="font-semibold text-gray-800">{item.title}</h3>
                   <p className="text-sm text-gray-600">視聴日: {item.watchedAt}</p>
