@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
     // シンプルなテストメール
     const { data, error } = await resend.emails.send({
-      from: 'onboarding@resend.dev', // Resendの認証済みドメイン
+      from: 'Acme <onboarding@resend.dev>', // Resendの認証済みドメイン
       to: [to],
       subject: subject,
       html: `
