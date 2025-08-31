@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase'
 import { VideoUploader } from '@/components/video-uploader'
 import { VideoManager } from '@/components/video-manager'
+import { EmailEditor } from '@/components/email-editor'
 import type { User } from '@supabase/supabase-js'
 
 export default function AdminPage() {
@@ -80,6 +81,16 @@ export default function AdminPage() {
             >
               📋 動画管理
             </button>
+            <button
+              onClick={() => setActiveTab('email')}
+              className={`py-4 px-2 border-b-2 font-medium text-sm ${
+                activeTab === 'email'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700'
+              }`}
+            >
+              📧 メール管理
+            </button>
           </div>
         </div>
       </div>
@@ -88,6 +99,7 @@ export default function AdminPage() {
       <main className="max-w-7xl mx-auto px-4 py-8">
         {activeTab === 'upload' && <VideoUploader userId={user.id} />}
         {activeTab === 'manage' && <VideoManager userId={user.id} />}
+        {activeTab === 'email' && <EmailEditor userId={user.id} />}
       </main>
     </div>
   )
