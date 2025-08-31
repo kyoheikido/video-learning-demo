@@ -441,11 +441,11 @@ export function EmailEditor({ userId }: EmailEditorProps) {
               <div className="mt-6 p-4 bg-gray-50 rounded">
                 <h4 className="font-medium text-gray-800 mb-2">📝 使用可能な変数</h4>
                 <div className="text-sm text-gray-600 space-y-1">
-                  <div><code>{{user_name}}</code> - ユーザー名</div>
-                  <div><code>{{user_email}}</code> - メールアドレス</div>
-                  <div><code>{{site_url}}</code> - サイトURL</div>
-                  <div><code>{{unsubscribe_url}}</code> - 配信停止URL</div>
-                </div>
+                  <div><code>{'{{user_name}}'}</code> - ユーザー名</div>
+<div><code>{'{{user_email}}'}</code> - メールアドレス</div>
+<div><code>{'{{site_url}}'}</code> - サイトURL</div>
+<div><code>{'{{unsubscribe_url}}'}</code> - 配信停止URL</div>
+</div>
               </div>
             </>
           ) : (
