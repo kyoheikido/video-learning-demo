@@ -202,7 +202,6 @@ export function EmailEditor({ userId }: EmailEditorProps) {
         body: JSON.stringify({
           to: testEmail,
           subject: selectedTemplate.subject.replace('{{user_name}}', 'テストユーザー'),
-          template: selectedTemplate.template_type,
           userData: {
             name: 'テストユーザー',
             email: testEmail
@@ -210,10 +209,14 @@ export function EmailEditor({ userId }: EmailEditorProps) {
         })
       })
 
-      if (response.ok) {
+      const result = await response.json()
+      console.log('API Response:', result) // デバッグ用
+
+      if (response.ok && result.success) {
         alert('テストメールを送信しました！')
       } else {
-        throw new Error('送信失敗')
+        console.error('API Error:', result)
+        alert(`送信に失敗しました: ${result.error || 'Unknown error'}`)
       }
     } catch (error) {
       console.error('テスト送信エラー:', error)
@@ -442,10 +445,10 @@ export function EmailEditor({ userId }: EmailEditorProps) {
                 <h4 className="font-medium text-gray-800 mb-2">📝 使用可能な変数</h4>
                 <div className="text-sm text-gray-600 space-y-1">
                   <div><code>{'{{user_name}}'}</code> - ユーザー名</div>
-<div><code>{'{{user_email}}'}</code> - メールアドレス</div>
-<div><code>{'{{site_url}}'}</code> - サイトURL</div>
-<div><code>{'{{unsubscribe_url}}'}</code> - 配信停止URL</div>
-</div>
+                  <div><code>{'{{user_email}}'}</code> - メールアドレス</div>
+                  <div><code>{'{{site_url}}'}</code> - サイトURL</div>
+                  <div><code>{'{{unsubscribe_url}}'}</code> - 配信停止URL</div>
+                </div>
               </div>
             </>
           ) : (
