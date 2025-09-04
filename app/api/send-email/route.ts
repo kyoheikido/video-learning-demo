@@ -7,7 +7,6 @@ export async function POST(request: NextRequest) {
   try {
     console.log('=== API開始 ===')
     console.log('APIキー存在確認:', !!process.env.RESEND_API_KEY)
-    console.log('APIキー先頭:', process.env.RESEND_API_KEY?.substring(0, 8))
 
     const body = await request.json()
     console.log('リクエストボディ:', body)
@@ -15,14 +14,25 @@ export async function POST(request: NextRequest) {
     const { to, subject, userData } = body
 
     if (!to || !subject) {
-      console.log('必須パラメータ不足:', { to: !!to, subject: !!subject })
       return NextResponse.json({ error: '必須パラメータが不足しています' }, { status: 400 })
+    }
+
+    // テスト環境では登録済みメールアドレスに制限
+    const allowedTestEmails = [
+      'k.kido@tms-partners.com', // あなたのResend登録メール
+    ]
+
+    if (!allowedTestEmails.includes(to)) {
+      return NextResponse.json({ 
+        error: 'テストメールは k.kido@tms-partners.com 宛てのみ送信可能です',
+        allowedEmails: allowedTestEmails
+      }, { status: 400 })
     }
 
     console.log('メール送信開始...')
 
     const emailData = {
-      from: 'Acme <onboarding@resend.dev>',
+      from: 'LearnHub <onboarding@resend.dev>',
       to: [to],
       subject: subject,
       html: `
@@ -30,6 +40,11 @@ export async function POST(request: NextRequest) {
           <h1 style="color: #3B82F6;">テストメール送信成功!</h1>
           <p>こんにちは、${userData?.name || 'ユーザー'}さん</p>
           <p>LearnHubのメール配信機能が正常に動作しています。</p>
+          <div style="background-color: #F0F9FF; padding: 15px; border-radius: 6px; margin: 20px 0;">
+            <p style="margin: 0; color: #1E40AF;">
+              🎉 メール自動配信システムが正常に稼働中です！
+            </p>
+          </div>
         </div>
       `,
     }
@@ -56,9 +71,7 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('=== キャッチエラー ===')
-    console.error('エラータイプ:', typeof error)
     console.error('エラー内容:', error)
-    console.error('エラースタック:', error instanceof Error ? error.stack : 'スタックなし')
     
     return NextResponse.json({ 
       error: 'APIエラー', 
@@ -72,6 +85,6 @@ export async function GET() {
   return NextResponse.json({ 
     message: 'Email API is working', 
     hasApiKey: !!process.env.RESEND_API_KEY,
-    apiKeyPrefix: process.env.RESEND_API_KEY?.substring(0, 8)
+    allowedTestEmail: 'k.kido@tms-partners.com'
   })
 }
